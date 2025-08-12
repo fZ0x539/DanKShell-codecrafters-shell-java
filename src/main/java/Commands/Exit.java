@@ -1,7 +1,5 @@
 package Commands;
 
-import java.util.Scanner;
-
 public class Exit extends CommandSuper {
 
     public Exit() {
@@ -9,9 +7,11 @@ public class Exit extends CommandSuper {
     }
 
     @Override
-    public void runCommand(Scanner scanner) {
-        String input = scanner.nextLine();
+    public void runCommand(String[] inputArgs) {
+        String input = inputArgs[0];
         if (input.trim().equalsIgnoreCase("0"))
             System.exit(0);
+        else
+            System.out.println("Invalid exit code.");
     }
 }

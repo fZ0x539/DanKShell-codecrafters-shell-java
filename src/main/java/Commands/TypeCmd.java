@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
-import java.util.Scanner;
 
 public class TypeCmd extends CommandSuper {
 
@@ -16,8 +15,8 @@ public class TypeCmd extends CommandSuper {
     }
 
     @Override
-    public void runCommand(Scanner scanner) {
-        String commandName = scanner.next();
+    public void runCommand(String[] inputArgs) {
+        String commandName = inputArgs[0];
         CommandSuper command = commandMap.get(commandName.toLowerCase());
 
         //If command isn't registered internally then search PATHs for exec
@@ -31,7 +30,6 @@ public class TypeCmd extends CommandSuper {
         //Otherwise not found
         else {
             System.out.println(commandName + ": not found");
-            scanner.nextLine();
         }
     }
 

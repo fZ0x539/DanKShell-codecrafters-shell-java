@@ -1,6 +1,6 @@
 package Commands;
 
-import java.util.Scanner;
+import java.util.Arrays;
 
 public class Echo extends CommandSuper {
 
@@ -9,9 +9,7 @@ public class Echo extends CommandSuper {
     }
 
     @Override
-    public void runCommand(Scanner scanner) {
-        if (scanner.hasNextLine()) {
-            System.out.println(scanner.nextLine().trim());
-        }
+    public void runCommand(String[] inputArgs) {
+        System.out.println(String.join(" ", Arrays.copyOfRange(inputArgs, 0, inputArgs.length)));
     }
 }

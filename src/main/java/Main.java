@@ -3,6 +3,7 @@ import Commands.Echo;
 import Commands.Exit;
 import Commands.TypeCmd;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -16,19 +17,25 @@ public class Main {
         commandMap.put("echo", new Echo());
         commandMap.put("type", new TypeCmd(commandMap));
 
-
         while (true) {
             System.out.print("$ ");
-            String commandName = scanner.next();
+            String inputLine = scanner.nextLine().trim();
+            if (inputLine.isEmpty()) continue;
+
+            String[] parts = inputLine.split(" ");
+            String commandName = parts[0];
+            String[] arguments = Arrays.copyOfRange(parts, 1, parts.length);
+
             CommandSuper command = commandMap.get(commandName.toLowerCase());
 
-            if (command != null){
-                command.runCommand(scanner);
-            }
-            else {
-                System.out.println(commandName + ": command not found");
-                scanner.nextLine();
+            if (command != null && parts.length > 1) {
+                command.runCommand(arguments);
+            } else {
+                if (!ProcessRunner.findAndRunExecutable(parts)) {
+                    System.out.println(commandName + ": command not found");
+                }
             }
         }
+
     }
 }

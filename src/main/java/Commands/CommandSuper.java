@@ -1,7 +1,5 @@
 package Commands;
 
-import java.util.Scanner;
-
 public abstract class CommandSuper {
     private final String name;
     private final Type type;
@@ -21,6 +19,6 @@ public abstract class CommandSuper {
         return name;
     }
 
-    public abstract void runCommand(Scanner scanner);
+    public abstract void runCommand(String[] inputArgs);
 
 }
