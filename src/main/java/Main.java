@@ -14,7 +14,7 @@ public class Main {
             if ("echo".equalsIgnoreCase(command))
                 System.out.println(input.trim());
             else
-                System.out.println(input + ": command not found");
+                System.out.println(command + ": command not found");
 
         }
     }
