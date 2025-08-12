@@ -16,6 +16,7 @@ public class Main {
         commandMap.put("echo", new Echo());
         commandMap.put("type", new TypeCmd(commandMap));
 
+
         while (true) {
             System.out.print("$ ");
             String commandName = scanner.next();
