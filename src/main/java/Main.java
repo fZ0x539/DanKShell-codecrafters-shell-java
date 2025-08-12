@@ -12,7 +12,7 @@ public class Main {
             if ("exit".equalsIgnoreCase(command) && " 0".equalsIgnoreCase(input))
                 break;
             if ("echo".equalsIgnoreCase(command))
-                System.out.println(input);
+                System.out.println(input.trim());
             else
                 System.out.println(input + ": command not found");
 
