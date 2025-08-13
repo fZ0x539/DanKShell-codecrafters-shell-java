@@ -1,14 +1,15 @@
 package Commands.builtin;
 
-import Commands.CommandSuper;
 import Commands.Type;
+import Utility.ShellContext;
+import core.ContextAwareCommandSuper;
 
 import java.nio.file.Paths;
 
-public class Pwd extends CommandSuper {
+public class Pwd extends ContextAwareCommandSuper {
 
-    public Pwd(){
-        super("pwd", Type.BUILTIN);
+    public Pwd(ShellContext shellContext){
+        super("pwd", Type.BUILTIN, shellContext);
     }
 
     @Override

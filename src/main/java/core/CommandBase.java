@@ -1,14 +1,16 @@
-package Commands;
+package core;
 
-public abstract class CommandSuper {
+import Commands.Type;
+import Utility.ShellContext;
+
+public abstract class CommandBase {
     private final String name;
     private final Type type;
 
-    public CommandSuper(String name, Type type) {
+    public CommandBase(String name, Type type) {
         this.name = name.toLowerCase();
         this.type = type;
     }
-
 
     public String getType() {
         return type.getDescription();
@@ -24,5 +26,4 @@ public abstract class CommandSuper {
     }
 
     public abstract void runCommand(String[] inputArgs);
-
 }

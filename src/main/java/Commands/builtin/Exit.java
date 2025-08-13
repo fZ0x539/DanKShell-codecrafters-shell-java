@@ -1,6 +1,6 @@
 package Commands.builtin;
 
-import Commands.CommandSuper;
+import core.CommandSuper;
 import Commands.Type;
 
 public class Exit extends CommandSuper {

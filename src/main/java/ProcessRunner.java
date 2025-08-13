@@ -1,16 +1,15 @@
+import Utility.ShellContext;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class ProcessRunner {
 
 
-    public static boolean findAndRunExecutable(String[] parts) {
+    public static boolean findAndRunExecutable(String[] parts, ShellContext shellContext) {
 
-        String execPath = getPath(parts[0]);
+        String execPath = shellContext.resolveExecutablePath(parts[0]);
         if (execPath != null) {
             ProcessBuilder pb = new ProcessBuilder(parts);
             try {
@@ -37,17 +36,17 @@ public class ProcessRunner {
     }
 
 
-    public static String getPath(String execName) {
-        String pathEnv = System.getenv("PATH");
-        String[] dirArray = pathEnv.split(":");
-        for (String directoryPath : dirArray) {
-            Path candidatePath = Paths.get(directoryPath, execName);
-
-            if (Files.exists(candidatePath) && Files.isExecutable(candidatePath)) {
-                return candidatePath.toString();
-            }
-        }
-        return null;
-    }
+//    public static String getPath(String execName) {
+//        String pathEnv = System.getenv("PATH");
+//        String[] dirArray = pathEnv.split(":");
+//        for (String directoryPath : dirArray) {
+//            Path candidatePath = Paths.get(directoryPath, execName);
+//
+//            if (Files.exists(candidatePath) && Files.isExecutable(candidatePath)) {
+//                return candidatePath.toString();
+//            }
+//        }
+//        return null;
+//    }
 
 }

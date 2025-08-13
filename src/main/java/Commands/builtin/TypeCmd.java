@@ -1,31 +1,34 @@
 package Commands.builtin;
 
-import Commands.CommandSuper;
 import Commands.Type;
+import Utility.ShellContext;
+import core.CommandBase;
+import core.ContextAwareCommandSuper;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 
-public class TypeCmd extends CommandSuper {
+public class TypeCmd extends ContextAwareCommandSuper {
 
-    private final Map<String, CommandSuper> commandMap;
+    private final Map<String, CommandBase> commandMap;
 
-    public TypeCmd(Map<String, CommandSuper> commandMap) {
-        super("type", Type.BUILTIN);
+    public TypeCmd(Map<String, CommandBase> commandMap, ShellContext shellContext) {
+        super("type", Type.BUILTIN, shellContext);
         this.commandMap = commandMap;
     }
 
     @Override
     public void runCommand(String[] inputArgs) {
 //        String commandName = inputArgs[0];
-        for(String commandName : inputArgs){
-            CommandSuper command = commandMap.get(commandName.toLowerCase());
+        for (String commandName : inputArgs) {
+            CommandBase command = commandMap.get(commandName.toLowerCase());
 
             //If command isn't registered internally then search PATHs for exec
             if (command == null) {
-                searchPathsForExec(commandName);
+                String execPath = getShellContext().resolveExecutablePath(commandName);
+                if (execPath != null)
+                    System.out.println(commandName + " is " + execPath);
+                else
+                    System.out.println(commandName + ": not found");
             }
             // If command is registered, print out the name and type
             else if (commandMap.containsKey(commandName.toLowerCase())) {
@@ -36,21 +39,5 @@ public class TypeCmd extends CommandSuper {
                 System.out.println(commandName + ": not found");
             }
         }
-    }
-
-    public void searchPathsForExec(String commandName) {
-        String pathEnv = System.getenv("PATH");
-        String[] dirArray = pathEnv.split(":");
-        boolean found = false;
-        for (String directoryPath : dirArray) {
-            Path candidatePath = Paths.get(directoryPath, commandName);
-
-            if (Files.exists(candidatePath) && Files.isExecutable(candidatePath)) {
-                System.out.println(commandName + " is " + candidatePath);
-                found = true;
-            }
-        }
-        if (!found)
-            System.out.println(commandName + ": not found");
     }
 }
