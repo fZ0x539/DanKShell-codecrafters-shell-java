@@ -17,7 +17,7 @@ public class Pwd extends ContextAwareCommandSuper {
         if(inputArgs.length > 0)
             System.out.println(tooManyArgs());
         else {
-            String workingDir = Paths.get("").toAbsolutePath().toString();
+            String workingDir = getShellContext().getCurrentDirectory().toString();
             System.out.println(workingDir);
         }
     }

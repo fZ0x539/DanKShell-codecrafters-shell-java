@@ -15,8 +15,11 @@ public class ShellContext {
         return currentDirectory;
     }
 
-    public void setCurrentDirectory(Path currentDirectory) {
-        this.currentDirectory = currentDirectory;
+    public void setCurrentDirectory(Path candidateDirectory) {
+        if (!Files.isDirectory(candidateDirectory)) {
+            System.out.println("cd: " + candidateDirectory + ": No such file or directory");
+        }
+        this.currentDirectory = candidateDirectory;
     }
 
     public String resolveExecutablePath(String execName) {

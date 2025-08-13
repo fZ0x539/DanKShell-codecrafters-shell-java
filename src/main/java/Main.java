@@ -1,9 +1,6 @@
+import Commands.builtin.*;
 import core.CommandBase;
 import core.CommandSuper;
-import Commands.builtin.Echo;
-import Commands.builtin.Exit;
-import Commands.builtin.Pwd;
-import Commands.builtin.TypeCmd;
 import Utility.ShellContext;
 
 import java.util.Arrays;
@@ -20,6 +17,7 @@ public class Main {
         commandMap.put("exit", new Exit());
         commandMap.put("pwd", new Pwd(shellContext));
         commandMap.put("echo", new Echo());
+        commandMap.put("cd", new Cd(shellContext));
         commandMap.put("type", new TypeCmd(commandMap, shellContext));
 
         while (true) {
