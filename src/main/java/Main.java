@@ -1,7 +1,8 @@
 import Commands.CommandSuper;
-import Commands.Echo;
-import Commands.Exit;
-import Commands.TypeCmd;
+import Commands.builtin.Echo;
+import Commands.builtin.Exit;
+import Commands.builtin.Pwd;
+import Commands.builtin.TypeCmd;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class Main {
 
         Map<String, CommandSuper> commandMap = new HashMap<>();
         commandMap.put("exit", new Exit());
+        commandMap.put("pwd", new Pwd());
         commandMap.put("echo", new Echo());
         commandMap.put("type", new TypeCmd(commandMap));
 
@@ -28,7 +30,7 @@ public class Main {
 
             CommandSuper command = commandMap.get(commandName.toLowerCase());
 
-            if (command != null && parts.length > 1) {
+            if (command != null) {
                 command.runCommand(arguments);
             } else {
                 if (!ProcessRunner.findAndRunExecutable(parts)) {

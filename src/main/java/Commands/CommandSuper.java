@@ -19,6 +19,10 @@ public abstract class CommandSuper {
         return name;
     }
 
+    public String tooManyArgs(){
+        return name+": too many arguments";
+    }
+
     public abstract void runCommand(String[] inputArgs);
 
 }

@@ -1,4 +1,7 @@
-package Commands;
+package Commands.builtin;
+
+import Commands.CommandSuper;
+import Commands.Type;
 
 import java.util.Arrays;
 

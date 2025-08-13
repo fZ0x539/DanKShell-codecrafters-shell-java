@@ -1,4 +1,7 @@
-package Commands;
+package Commands.builtin;
+
+import Commands.CommandSuper;
+import Commands.Type;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,20 +19,22 @@ public class TypeCmd extends CommandSuper {
 
     @Override
     public void runCommand(String[] inputArgs) {
-        String commandName = inputArgs[0];
-        CommandSuper command = commandMap.get(commandName.toLowerCase());
+//        String commandName = inputArgs[0];
+        for(String commandName : inputArgs){
+            CommandSuper command = commandMap.get(commandName.toLowerCase());
 
-        //If command isn't registered internally then search PATHs for exec
-        if (command == null) {
-            searchPathsForExec(commandName);
-        }
-        // If command is registered, print out the name and type
-        else if (commandMap.containsKey(commandName.toLowerCase())) {
-            System.out.println(command.getName() + command.getType());
-        }
-        //Otherwise not found
-        else {
-            System.out.println(commandName + ": not found");
+            //If command isn't registered internally then search PATHs for exec
+            if (command == null) {
+                searchPathsForExec(commandName);
+            }
+            // If command is registered, print out the name and type
+            else if (commandMap.containsKey(commandName.toLowerCase())) {
+                System.out.println(command.getName() + command.getType());
+            }
+            //Otherwise not found
+            else {
+                System.out.println(commandName + ": not found");
+            }
         }
     }
 
