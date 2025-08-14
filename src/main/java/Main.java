@@ -2,14 +2,12 @@ import Commands.builtin.*;
 import core.CommandBase;
 import Utility.ShellContext;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
+        InputParser inputParser = new InputParser();
 
         ShellContext shellContext = new ShellContext();
         Map<String, CommandBase> commandMap = new HashMap<>();
@@ -24,16 +22,18 @@ public class Main {
             String inputLine = scanner.nextLine().trim();
             if (inputLine.isEmpty()) continue;
 
-            String[] parts = inputLine.split(" ");
-            String commandName = parts[0];
-            String[] arguments = Arrays.copyOfRange(parts, 1, parts.length);
+            List<String> tokens = inputParser.tokenizeInput(inputLine);
+            String commandName = tokens.getFirst().toLowerCase();
+            String[] arguments = tokens.subList(1, tokens.size()).toArray(new String[0]);
+
+
 
             CommandBase command = commandMap.get(commandName.toLowerCase());
 
             if (command != null) {
                 command.runCommand(arguments);
             } else {
-                if (!ProcessRunner.findAndRunExecutable(parts, shellContext)) {
+                if (!ProcessRunner.findAndRunExecutable(tokens.toArray(new String[0]), shellContext)) {
                     System.out.println(commandName + ": command not found");
                 }
             }
