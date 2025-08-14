@@ -4,7 +4,10 @@ import Commands.CmdType;
 import Utility.ShellContext;
 import core.ContextAwareCommandSuper;
 
+import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Cd extends ContextAwareCommandSuper {
 
@@ -21,7 +24,21 @@ public class Cd extends ContextAwareCommandSuper {
         String path = inputArgs[0].trim();
 
         try {
-            getShellContext().setCurrentDirectory(path);
+            Path candidateDirectory;
+            if (path.startsWith("/")) {
+                candidateDirectory = Paths.get(path).normalize();
+            } else if (path.startsWith("~")) {
+                candidateDirectory = Paths.get(System.getenv("HOME")).normalize();
+            } else {
+                candidateDirectory = getShellContext().getCurrentDirectory()
+                        .resolve(path).normalize();
+            }
+
+            if (Files.isDirectory(candidateDirectory)) {
+                getShellContext().setCurrentDirectory(candidateDirectory);
+            } else {
+                System.out.println("cd: " + path + ": No such file or directory");
+            }
         } catch (InvalidPathException e) {
             System.out.println("cd: " + path + ": Invalid path");
         }
