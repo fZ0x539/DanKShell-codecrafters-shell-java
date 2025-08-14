@@ -1,18 +1,18 @@
 package Commands.builtin;
 
-import Commands.Type;
+import Commands.CmdType;
 import Utility.ShellContext;
 import core.CommandBase;
 import core.ContextAwareCommandSuper;
 
 import java.util.Map;
 
-public class TypeCmd extends ContextAwareCommandSuper {
+public class Type extends ContextAwareCommandSuper {
 
     private final Map<String, CommandBase> commandMap;
 
-    public TypeCmd(Map<String, CommandBase> commandMap, ShellContext shellContext) {
-        super("type", Type.BUILTIN, shellContext);
+    public Type(Map<String, CommandBase> commandMap, ShellContext shellContext) {
+        super("type", CmdType.BUILTIN, shellContext);
         this.commandMap = commandMap;
     }
 

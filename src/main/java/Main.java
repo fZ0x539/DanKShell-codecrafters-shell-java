@@ -1,6 +1,5 @@
 import Commands.builtin.*;
 import core.CommandBase;
-import core.CommandSuper;
 import Utility.ShellContext;
 
 import java.util.Arrays;
@@ -18,7 +17,7 @@ public class Main {
         commandMap.put("pwd", new Pwd(shellContext));
         commandMap.put("echo", new Echo());
         commandMap.put("cd", new Cd(shellContext));
-        commandMap.put("type", new TypeCmd(commandMap, shellContext));
+        commandMap.put("type", new Type(commandMap, shellContext));
 
         while (true) {
             System.out.print("$ ");

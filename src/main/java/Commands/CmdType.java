@@ -1,11 +1,11 @@
 package Commands;
 
-public enum Type {
+public enum CmdType {
     BUILTIN(" is a shell builtin");
 
     private final String description;
 
-    Type(String description) {
+    CmdType(String description) {
         this.description = description;
     }
 

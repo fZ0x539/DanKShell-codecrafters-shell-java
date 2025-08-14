@@ -1,12 +1,12 @@
 package Commands.builtin;
 
 import core.CommandSuper;
-import Commands.Type;
+import Commands.CmdType;
 
 public class Exit extends CommandSuper {
 
     public Exit() {
-        super("exit", Type.BUILTIN);
+        super("exit", CmdType.BUILTIN);
     }
 
     @Override

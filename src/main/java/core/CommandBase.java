@@ -1,19 +1,18 @@
 package core;
 
-import Commands.Type;
-import Utility.ShellContext;
+import Commands.CmdType;
 
 public abstract class CommandBase {
     private final String name;
-    private final Type type;
+    private final CmdType cmdType;
 
-    public CommandBase(String name, Type type) {
+    public CommandBase(String name, CmdType cmdType) {
         this.name = name.toLowerCase();
-        this.type = type;
+        this.cmdType = cmdType;
     }
 
     public String getType() {
-        return type.getDescription();
+        return cmdType.getDescription();
     }
 
 

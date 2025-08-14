@@ -15,11 +15,22 @@ public class ShellContext {
         return currentDirectory;
     }
 
-    public void setCurrentDirectory(Path candidateDirectory) {
-        if (!Files.isDirectory(candidateDirectory)) {
-            System.out.println("cd: " + candidateDirectory + ": No such file or directory");
+    public void setCurrentDirectory(String path) {
+        Path candidateDirectory;
+
+        if (path.startsWith("/")) {
+            // Absolute path
+            candidateDirectory = Paths.get(path).normalize();
+        } else {
+            // Relative path - resolve against current directory
+            candidateDirectory = currentDirectory.resolve(path).normalize();
         }
-        this.currentDirectory = candidateDirectory;
+
+        if (Files.isDirectory(candidateDirectory)) {
+            this.currentDirectory = candidateDirectory;
+        } else {
+            System.out.println("cd: " + path + ": No such file or directory");
+        }
     }
 
     public String resolveExecutablePath(String execName) {

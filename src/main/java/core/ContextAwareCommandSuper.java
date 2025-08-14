@@ -1,14 +1,14 @@
 package core;
 
-import Commands.Type;
+import Commands.CmdType;
 import Utility.ShellContext;
 
 public abstract class ContextAwareCommandSuper extends CommandBase{
 
     private final ShellContext shellContext;
 
-    public ContextAwareCommandSuper(String name, Type type, ShellContext shellContext) {
-        super(name, type);
+    public ContextAwareCommandSuper(String name, CmdType cmdType, ShellContext shellContext) {
+        super(name, cmdType);
         this.shellContext = shellContext;
     }
 

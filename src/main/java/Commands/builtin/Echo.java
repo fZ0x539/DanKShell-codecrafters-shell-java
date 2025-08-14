@@ -1,14 +1,14 @@
 package Commands.builtin;
 
 import core.CommandSuper;
-import Commands.Type;
+import Commands.CmdType;
 
 import java.util.Arrays;
 
 public class Echo extends CommandSuper {
 
     public Echo() {
-        super("echo", Type.BUILTIN);
+        super("echo", CmdType.BUILTIN);
     }
 
     @Override

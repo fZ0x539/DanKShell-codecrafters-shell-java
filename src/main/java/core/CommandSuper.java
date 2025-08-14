@@ -1,12 +1,11 @@
 package core;
 
-import Commands.Type;
-import Utility.ShellContext;
+import Commands.CmdType;
 
 public abstract class CommandSuper extends  CommandBase {
 
-    public CommandSuper(String name, Type type) {
-        super(name, type);
+    public CommandSuper(String name, CmdType cmdType) {
+        super(name, cmdType);
     }
 
     public abstract void runCommand(String[] inputArgs);
