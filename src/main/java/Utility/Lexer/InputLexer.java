@@ -18,13 +18,27 @@ public class InputLexer {
         StringBuilder currentToken = new StringBuilder();
         List<String> tokenList = new ArrayList<>();
         boolean insideQuotes = false;
+        boolean insideDoubleQuotes = false;
 
         for (char c : rawInputLine.toCharArray()) {
             switch (c) {
-                case '\'' -> insideQuotes = !insideQuotes;
+                case '\"' -> {
+                    if (!insideQuotes)
+                        insideDoubleQuotes = !insideDoubleQuotes;
+                    else
+                        currentToken.append(c);
+                }
 
+                case '\'' -> {
+                    if(!insideDoubleQuotes)
+                        insideQuotes = !insideQuotes;
+                    else
+                        currentToken.append(c);
+                }
+
+                //Break tokens up on space/tab, or keep the indentation if inside a single quote
                 case ' ', '\t' -> {
-                    if (insideQuotes) {
+                    if (insideQuotes || insideDoubleQuotes) {
                         currentToken.append(c);
                     } else {
                         finishCurrentToken(currentToken, tokenList);
@@ -39,7 +53,7 @@ public class InputLexer {
         finishCurrentToken(currentToken, tokenList);
 
         // Check for unclosed quotes
-        if (insideQuotes) {
+        if (insideQuotes || insideDoubleQuotes) {
             printError("Unclosed quote");
             return null;
         }
