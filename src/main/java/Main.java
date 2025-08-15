@@ -1,4 +1,5 @@
 import Commands.builtin.*;
+import Utility.Lexer.InputLexer;
 import core.CommandBase;
 import Utility.ShellContext;
 
@@ -7,7 +8,7 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        InputParser inputParser = new InputParser();
+        InputLexer inputTokenizer = new InputLexer();
 
         ShellContext shellContext = new ShellContext();
         Map<String, CommandBase> commandMap = new HashMap<>();
@@ -22,21 +23,24 @@ public class Main {
             String inputLine = scanner.nextLine().trim();
             if (inputLine.isEmpty()) continue;
 
-            List<String> tokens = inputParser.tokenizeInput(inputLine);
-            String commandName = tokens.getFirst().toLowerCase();
-            String[] arguments = tokens.subList(1, tokens.size()).toArray(new String[0]);
+            try{
+                List<String> tokens = inputTokenizer.tokenizeInput(inputLine);
+                String commandName = tokens.getFirst().toLowerCase();
+                String[] arguments = tokens.subList(1, tokens.size()).toArray(new String[0]);
 
+                CommandBase command = commandMap.get(commandName.toLowerCase());
 
-
-            CommandBase command = commandMap.get(commandName.toLowerCase());
-
-            if (command != null) {
-                command.runCommand(arguments);
-            } else {
-                if (!ProcessRunner.findAndRunExecutable(tokens.toArray(new String[0]), shellContext)) {
-                    System.out.println(commandName + ": command not found");
+                if (command != null) {
+                    command.runCommand(arguments);
+                } else {
+                    if (!ProcessRunner.findAndRunExecutable(tokens.toArray(new String[0]), shellContext)) {
+                        System.out.println(commandName + ": command not found");
+                    }
                 }
+            } catch (NullPointerException e){
+                continue;
             }
+
         }
 
     }
