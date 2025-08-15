@@ -19,27 +19,45 @@ public class InputLexer {
         List<String> tokenList = new ArrayList<>();
         boolean insideQuotes = false;
         boolean insideDoubleQuotes = false;
+        boolean isEscaped = false;
 
         for (char c : rawInputLine.toCharArray()) {
             switch (c) {
                 case '\"' -> {
-                    if (!insideQuotes)
+                    if (!insideQuotes && !isEscaped)
                         insideDoubleQuotes = !insideDoubleQuotes;
-                    else
+                    else{
                         currentToken.append(c);
+                        if(isEscaped)
+                            isEscaped = !isEscaped;
+                    }
+
                 }
 
                 case '\'' -> {
-                    if(!insideDoubleQuotes)
+                    if(!insideDoubleQuotes && !isEscaped)
                         insideQuotes = !insideQuotes;
-                    else
+                    else{
                         currentToken.append(c);
+                        if(isEscaped)
+                            isEscaped = !isEscaped;
+                    }
+                }
+
+                case '\\' -> {
+                    if (insideQuotes || insideDoubleQuotes) { //
+                        currentToken.append(c);
+                    }
+                    else
+                        isEscaped = !isEscaped;
                 }
 
                 //Break tokens up on space/tab, or keep the indentation if inside a single quote
                 case ' ', '\t' -> {
-                    if (insideQuotes || insideDoubleQuotes) {
+                    if (insideQuotes || insideDoubleQuotes || isEscaped) {
                         currentToken.append(c);
+                        if(isEscaped)
+                            isEscaped = !isEscaped;
                     } else {
                         finishCurrentToken(currentToken, tokenList);
                     }
