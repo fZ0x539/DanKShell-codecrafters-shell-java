@@ -5,10 +5,11 @@ import Utility.ShellContext;
 
 import java.util.*;
 
+
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        InputLexer inputTokenizer = new InputLexer();
+        InputLexer inputLexer = new InputLexer();
 
         ShellContext shellContext = new ShellContext();
         Map<String, CommandBase> commandMap = new HashMap<>();
@@ -24,7 +25,7 @@ public class Main {
             if (inputLine.isEmpty()) continue;
 
             try{
-                List<String> tokens = inputTokenizer.tokenizeInput(inputLine);
+                List<String> tokens = inputLexer.tokenizeInput(inputLine);
                 String commandName = tokens.getFirst().toLowerCase();
                 String[] arguments = tokens.subList(1, tokens.size()).toArray(new String[0]);
 
