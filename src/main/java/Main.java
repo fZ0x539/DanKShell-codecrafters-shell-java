@@ -2,6 +2,7 @@ import Command.Builtin.*;
 import Utility.Lexer.InputLexer;
 import Core.CommandBase;
 import Utility.ShellContext;
+import Exception.InvalidRedirectionPathException;
 
 import java.util.*;
 
@@ -40,6 +41,8 @@ public class Main {
                 }
             } catch (NullPointerException e){
                 continue;
+            } catch (RuntimeException e){
+                System.err.println(e.getMessage());
             }
 
         }

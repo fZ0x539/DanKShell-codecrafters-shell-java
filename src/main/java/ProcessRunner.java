@@ -1,18 +1,11 @@
-import Utility.Redirection.RedirectionType;
 import Utility.ShellContext;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
+import java.io.*;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 
-import Exception.InvalidRedirectionPathException;
+import static Utility.Redirection.RedirectionHandler.redirectOutput;
 
 public class ProcessRunner {
 
@@ -21,46 +14,21 @@ public class ProcessRunner {
 
         String execPath = shellContext.resolveExecutablePath(tokenizedParts[0]);
         if (execPath != null) {
-
-            String[] partsBeforeOutput = null;
-            String outputPath = null;
-            RedirectionType redirectionType = null;
-            //* ex: ls   /tmp/baz   >   /tmp/foo/baz.md
-            //*     [0]     [1]    [2]      [3]
-            //*  tokenizedParts.length = 4. tP.length - 1 = 3
-            //*  i = 3
-            //*  First  run: tokenizedParts[3] = /tmp/foo/baz.md
-            //*  Second run: tokenizedParts[2] = >
-            //*  RedirectionType FOUND: STDOUT
-            //*
-            for (int i = tokenizedParts.length - 1; i >= 1; i--) {
-                if (RedirectionType.fromOperator(tokenizedParts[i]) == RedirectionType.STDOUT) {
-                    //if Redirect Operator is the last element, throw exception.
-                    if (i == tokenizedParts.length - 1)
-                        throw new InvalidRedirectionPathException();
-                    redirectionType = RedirectionType.fromOperator(tokenizedParts[i]);
-                    outputPath = tokenizedParts[i + 1];
-                    partsBeforeOutput = Arrays.copyOfRange(tokenizedParts, 0, i);
-                    break;
-                }
-            }
-            //! DEBUG
-//            System.out.println("partsBeforeOutput: " + Arrays.toString(partsBeforeOutput));
-//            System.out.println("outputPath: " + outputPath);
-//            System.out.println("RedirectionType: " + redirectionType.toString());
-
-
+            var redirectionResult = redirectOutput(tokenizedParts);
             ProcessBuilder pb;
-            if (redirectionType != null && outputPath != null) {
-                pb = new ProcessBuilder(partsBeforeOutput);
+
+            // If redirected
+            if (redirectionResult != null) {
+                pb = new ProcessBuilder(redirectionResult.getPartsBeforeOutput());
                 try {
-                    Path redirectPath = Paths.get(outputPath);
+                    Path redirectPath = Paths.get(redirectionResult.getOutput());
                     pb.redirectOutput(redirectPath.toFile());
                 } catch (InvalidPathException e) {
                     System.out.println(e.getMessage());
                 }
-
-            } else {
+            }
+            // Else run normally
+            else {
                 pb = new ProcessBuilder(tokenizedParts);
             }
 
@@ -68,15 +36,15 @@ public class ProcessRunner {
             try {
                 Process process = pb.start();
 
-                try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
-
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        System.out.println(line);
-                    }
-                }
+                Thread outThread = pipeStream(process.getInputStream(), System.out);
+                Thread errThread = pipeStream(process.getErrorStream(), System.err);
 
                 process.waitFor();
+
+                // Wait for both threads to finish printing
+                outThread.join();
+                errThread.join();
+
                 return true;
             } catch (IOException | InterruptedException e) {
                 throw new RuntimeException(e);
@@ -87,4 +55,23 @@ public class ProcessRunner {
         return false;
 
     }
+
+
+    private static Thread pipeStream(InputStream in, PrintStream out) {
+        Thread t = new Thread(() -> {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    out.println(line);
+                }
+            } catch (IOException e) {
+                System.err.println(e.getMessage());
+                ;
+            }
+        });
+        t.start();
+        return t;
+    }
+
+
 }
