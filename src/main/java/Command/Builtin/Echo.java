@@ -1,7 +1,7 @@
-package Commands.builtin;
+package Command.Builtin;
 
-import core.CommandSuper;
-import Commands.CmdType;
+import Core.CommandSuper;
+import Command.CmdType;
 
 import java.util.Arrays;
 

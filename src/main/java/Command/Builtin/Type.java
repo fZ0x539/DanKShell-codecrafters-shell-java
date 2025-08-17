@@ -1,9 +1,9 @@
-package Commands.builtin;
+package Command.Builtin;
 
-import Commands.CmdType;
+import Command.CmdType;
 import Utility.ShellContext;
-import core.CommandBase;
-import core.ContextAwareCommandSuper;
+import Core.CommandBase;
+import Core.ContextAwareCommandSuper;
 
 import java.util.Map;
 

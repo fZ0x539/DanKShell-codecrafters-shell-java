@@ -1,6 +1,6 @@
-package core;
+package Core;
 
-import Commands.CmdType;
+import Command.CmdType;
 
 public abstract class CommandSuper extends  CommandBase {
 

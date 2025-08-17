@@ -1,6 +1,6 @@
-import Commands.builtin.*;
+import Command.Builtin.*;
 import Utility.Lexer.InputLexer;
-import core.CommandBase;
+import Core.CommandBase;
 import Utility.ShellContext;
 
 import java.util.*;

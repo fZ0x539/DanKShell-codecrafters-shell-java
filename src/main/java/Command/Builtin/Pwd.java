@@ -1,8 +1,8 @@
-package Commands.builtin;
+package Command.Builtin;
 
-import Commands.CmdType;
+import Command.CmdType;
 import Utility.ShellContext;
-import core.ContextAwareCommandSuper;
+import Core.ContextAwareCommandSuper;
 
 public class Pwd extends ContextAwareCommandSuper {
 

@@ -1,8 +1,8 @@
-package Commands.builtin;
+package Command.Builtin;
 
-import Commands.CmdType;
+import Command.CmdType;
 import Utility.ShellContext;
-import core.ContextAwareCommandSuper;
+import Core.ContextAwareCommandSuper;
 
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;

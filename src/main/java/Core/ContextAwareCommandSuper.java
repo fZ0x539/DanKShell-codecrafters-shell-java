@@ -1,6 +1,6 @@
-package core;
+package Core;
 
-import Commands.CmdType;
+import Command.CmdType;
 import Utility.ShellContext;
 
 public abstract class ContextAwareCommandSuper extends CommandBase{
