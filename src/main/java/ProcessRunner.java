@@ -1,3 +1,4 @@
+import Utility.Redirection.RedirectionType;
 import Utility.ShellContext;
 
 import java.io.*;
@@ -22,7 +23,11 @@ public class ProcessRunner {
                 pb = new ProcessBuilder(redirectionResult.getPartsBeforeOutput());
                 try {
                     Path redirectPath = Paths.get(redirectionResult.getOutput());
-                    pb.redirectOutput(redirectPath.toFile());
+                    if (redirectionResult.getRedirectionType() == RedirectionType.STDOUT) {
+                        pb.redirectOutput(redirectPath.toFile());
+                    } else if (redirectionResult.getRedirectionType() == RedirectionType.STDERR) {
+                        pb.redirectError(redirectPath.toFile());
+                    }
                 } catch (InvalidPathException e) {
                     System.out.println(e.getMessage());
                 }

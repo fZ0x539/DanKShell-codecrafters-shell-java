@@ -55,8 +55,10 @@ public abstract class CommandBase {
 //                    .equals(resultContext.getRedirectionType().toString(), ">>")
 //                    ? StandardOpenOption.APPEND : StandardOpenOption.WRITE;
 
-            Files.write(outputPath, content.getBytes(), StandardOpenOption.WRITE);
-
+            if(resultContext.getRedirectionType() == RedirectionType.STDOUT)
+                Files.write(outputPath, content.getBytes(), StandardOpenOption.WRITE);
+            else
+                System.out.println(content);
         }
         catch (InvalidPathException | IOException e){
             System.err.println(e.getMessage());

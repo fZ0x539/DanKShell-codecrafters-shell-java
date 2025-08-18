@@ -17,7 +17,8 @@ public class RedirectionHandler {
         //*  RedirectionType FOUND: STDOUT
         //*
         for (int i = tokenizedParts.length - 1; i >= 1; i--) {
-            if (RedirectionType.fromOperator(tokenizedParts[i]) == RedirectionType.STDOUT) {
+            RedirectionType redirType = RedirectionType.fromOperator(tokenizedParts[i]);
+            if (redirType != null && redirType.isRedirect()) {
                 //if Redirect Operator is the last element, throw exception.
                 if (i == tokenizedParts.length - 1)
                     throw new InvalidRedirectionPathException();
@@ -32,7 +33,7 @@ public class RedirectionHandler {
               //!DEBUG
 //            System.out.println("partsBeforeOutput: " + Arrays.toString(partsBeforeOutput));
 //            System.out.println("outputPath: " + outputPath);
-//            System.out.println("RedirectionType: " + redirectionType.toString());
+//            System.out.println("RedirectionType: " + redirectionResult.getRedirectionType().toString());
 
         return redirectionResult;
     }

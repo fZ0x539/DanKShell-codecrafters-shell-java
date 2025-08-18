@@ -20,4 +20,8 @@ public enum RedirectionType {
         }
         return null;
     }
+
+    public boolean isRedirect() {
+        return this == STDOUT || this == STDERR;
+    }
 }
