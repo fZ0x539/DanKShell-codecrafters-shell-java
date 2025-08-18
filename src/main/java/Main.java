@@ -34,6 +34,8 @@ public class Main {
 
         Completer cmdCompleter = new StringsCompleter(commandMap.keySet());
 
+
+
         Terminal terminal = TerminalBuilder
                 .builder()
                 .system(true)
