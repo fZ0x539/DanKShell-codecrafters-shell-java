@@ -4,11 +4,8 @@ import Command.CmdType;
 import Utility.Redirection.RedirectionContext;
 import Utility.Redirection.RedirectionType;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.Arrays;
-import java.util.Objects;
 
 public abstract class CommandBase {
     private final String name;
@@ -50,17 +47,13 @@ public abstract class CommandBase {
 
             String content = String.join("", resultContext.getPartsBeforeOutput());
 
-            //? potential future use case, leaving it here for now
-//            StandardOpenOption operationType = Objects
-//                    .equals(resultContext.getRedirectionType().toString(), ">>")
-//                    ? StandardOpenOption.APPEND : StandardOpenOption.WRITE;
-
-            if(resultContext.getRedirectionType() == RedirectionType.STDOUT)
-                Files.write(outputPath, content.getBytes(), StandardOpenOption.WRITE);
-            else
-                System.out.println(content);
-        }
-        catch (InvalidPathException | IOException e){
+            switch (resultContext.getRedirectionType()) {
+                case STDOUT -> Files.write(outputPath, (content + System.lineSeparator()).getBytes(), StandardOpenOption.WRITE);
+                case STDERR -> System.out.println(content);
+                case STDOUT_APPEND -> Files.writeString(outputPath, content + System.lineSeparator(), StandardOpenOption.APPEND);
+                case STDERR_APPEND -> System.out.println(content);
+            }
+        } catch (InvalidPathException | IOException e) {
             System.err.println(e.getMessage());
         }
     }

@@ -15,27 +15,28 @@ public class ProcessRunner {
 
         String execPath = shellContext.resolveExecutablePath(tokenizedParts[0]);
         if (execPath != null) {
-            var redirectionResult = redirectOutput(tokenizedParts);
-            ProcessBuilder pb;
-
-            // If redirected
-            if (redirectionResult != null) {
-                pb = new ProcessBuilder(redirectionResult.getPartsBeforeOutput());
-                try {
-                    Path redirectPath = Paths.get(redirectionResult.getOutput());
-                    if (redirectionResult.getRedirectionType() == RedirectionType.STDOUT) {
-                        pb.redirectOutput(redirectPath.toFile());
-                    } else if (redirectionResult.getRedirectionType() == RedirectionType.STDERR) {
-                        pb.redirectError(redirectPath.toFile());
-                    }
-                } catch (InvalidPathException e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-            // Else run normally
-            else {
-                pb = new ProcessBuilder(tokenizedParts);
-            }
+//            var redirectionResult = redirectOutput(tokenizedParts);
+//            ProcessBuilder pb;
+//
+//            // If redirected
+//            if (redirectionResult != null) {
+//                pb = new ProcessBuilder(redirectionResult.getPartsBeforeOutput());
+//                try {
+//                    Path redirectPath = Paths.get(redirectionResult.getOutput());
+//                    if (redirectionResult.getRedirectionType() == RedirectionType.STDOUT) {
+//                        pb.redirectOutput(redirectPath.toFile());
+//                    } else if (redirectionResult.getRedirectionType() == RedirectionType.STDERR) {
+//                        pb.redirectError(redirectPath.toFile());
+//                    }
+//                } catch (InvalidPathException e) {
+//                    System.out.println(e.getMessage());
+//                }
+//            }
+//            // Else run normally
+//            else {
+//                pb = new ProcessBuilder(tokenizedParts);
+//            }
+            ProcessBuilder pb = buildProcess(tokenizedParts);
 
             pb.directory(new File(shellContext.getCurrentDirectory().toUri()));
             try {
@@ -61,6 +62,33 @@ public class ProcessRunner {
 
     }
 
+    private static ProcessBuilder buildProcess(String[] tokenizedParts) {
+        var redirectionResult = redirectOutput(tokenizedParts);
+        ProcessBuilder pb;
+
+        // If redirected
+        if (redirectionResult != null) {
+            pb = new ProcessBuilder(redirectionResult.getPartsBeforeOutput());
+            try {
+                Path redirectPath = Paths.get(redirectionResult.getOutput());
+
+                switch (redirectionResult.getRedirectionType()) {
+                    case STDOUT -> pb.redirectOutput(redirectPath.toFile());
+                    case STDERR -> pb.redirectError(redirectPath.toFile());
+                    case STDOUT_APPEND -> pb.redirectOutput(ProcessBuilder.Redirect.appendTo(redirectPath.toFile()));
+                    case STDERR_APPEND -> pb.redirectError(ProcessBuilder.Redirect.appendTo(redirectPath.toFile()));
+                }
+
+            } catch (InvalidPathException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        // Else run normally
+        else {
+            pb = new ProcessBuilder(tokenizedParts);
+        }
+        return pb;
+    }
 
     private static Thread pipeStream(InputStream in, PrintStream out) {
         Thread t = new Thread(() -> {

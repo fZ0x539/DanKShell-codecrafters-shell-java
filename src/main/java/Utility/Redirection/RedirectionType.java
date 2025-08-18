@@ -2,7 +2,9 @@ package Utility.Redirection;
 
 public enum RedirectionType {
     STDOUT(">", "1>"),
-    STDERR("2>");
+    STDERR("2>"),
+    STDOUT_APPEND("1>>", ">>"),
+    STDERR_APPEND("2>>");
 
     private final String[] operators;
 
@@ -22,6 +24,6 @@ public enum RedirectionType {
     }
 
     public boolean isRedirect() {
-        return this == STDOUT || this == STDERR;
+        return this == STDOUT || this == STDERR || this == STDOUT_APPEND || this == STDERR_APPEND;
     }
 }

@@ -1,9 +1,8 @@
 package Command.Builtin;
 
-import Core.CommandSuper;
 import Command.CmdType;
+import Core.CommandSuper;
 import Utility.Redirection.RedirectionContext;
-import Utility.Redirection.RedirectionType;
 
 import java.util.Arrays;
 
